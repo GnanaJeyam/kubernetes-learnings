@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicaset-example
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: dobby-tw
+    spec:
+      containers:
+        - name: dobby-tw
+          image: thecasualcoder/dobby
+          ports:
+            - containerPort: 4444
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 4444
+            initialDelaySeconds: 20
+            periodSeconds: 3
+  selector:
+    matchLabels:
+      app: dobby-tw
