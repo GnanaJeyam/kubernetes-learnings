@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: deployment-meta
+  annotations:
+    kubernetes.io/change-cause: "This is k8s rollout"
+spec: 
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 20%
+      maxUnavailable: 20%
+  template: 
+    metadata:
+      labels: 
+        apps: dobby-deployment
+    spec:
+      containers:
+        - name: tw-dobby
+          image: thecasualcoder/dobby
+          ports: 
+            - containerPort: 4444
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 4444
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          env: 
+            - name: VERSION
+              value: "5.2"
+  selector:
+    matchLabels:
+      apps: dobby-deployment

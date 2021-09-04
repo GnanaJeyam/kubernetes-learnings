@@ -5,3 +5,8 @@
 
 ## The below command will spin up a 3 replicas of dobby pod: 
 `kubectl apply -f replicaset-example.yml`
+
+
+## To hit the dobby /health Url:
+`curl -i <pod-ip>:4444/health`
+### Make sure you are inside the cluster to access the running pods.
