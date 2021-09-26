@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: empty-dir-volume
+spec:
+  volumes:
+  - name: testvolume
+    emptyDir: {}
+  containers:
+    - name: busybox
+      image: busybox
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do date >> /test/test.html; sleep 5; done;"]
+      volumeMounts:
+      - name: testvolume
+        mountPath: /test
+    - name: nginx
+      image: nginx
+      ports:
+       - containerPort: 80
+      volumeMounts:
+      - name: testvolume
+        mountPath: /app/test
