@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-file
+spec:
+  volumes:
+  - name: hostvolume
+    hostPath: 
+      path: /home/test/host.txt
+      type: File
+  containers:
+    - name: busybox
+      image: busybox
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do date >> /test/host.txt; sleep 5; done;"]
+      volumeMounts:
+      - name: hostvolume
+        mountPath: /test/host.txt
+    - name: nginx
+      image: nginx
+      ports:
+       - containerPort: 80
+      volumeMounts:
+      - name: hostvolume
+        mountPath: /app/test/host.txt

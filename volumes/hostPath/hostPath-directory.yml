@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-directory
+spec:
+  volumes:
+  - name: hostvolume
+    hostPath: 
+      path: /home/test
+      type: Directory
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+       - containerPort: 80
+      volumeMounts:
+      - name: hostvolume
+        mountPath: /app/test
+    - name: busybox
+      image: busybox
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do date >> /test/index.html; sleep 5; done;"]
+      volumeMounts:
+      - name: hostvolume
+        mountPath: /test
